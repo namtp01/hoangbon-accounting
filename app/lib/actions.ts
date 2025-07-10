@@ -101,6 +101,7 @@ export async function updateInvoice(
             WHERE id = ${id}
         `;
     } catch (error) {
+        console.log(error);
         return { message: 'Database error: Failed to Update Invoice'}
     }
     
