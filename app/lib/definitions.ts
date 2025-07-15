@@ -79,7 +79,7 @@ export type ProductsTableType = {
 export type CostsTableType = {
   id: string;
   name: string;
-  amount: string;
+  amount: number;
   date: string;
   note: string;
 };

@@ -1,5 +1,6 @@
 import { fetchFilteredProducts } from '@/app/lib/data';
 import { DeleteProduct, UpdateProduct } from '../invoices/buttons';
+import { formatNumber } from '../../lib/utils';
 
 export default async function ProductsTable({
     query,
@@ -35,7 +36,7 @@ export default async function ProductsTable({
                                         <div className="flex w-full items-center justify-between border-b py-5">
                                             <div className="flex w-1/2 flex-col">
                                                 <p className="text-xs">Số Lượng</p>
-                                                <p className="font-medium">{product.quantity}</p>
+                                                <p className="font-medium">{formatNumber(product.quantity)}</p>
                                             </div>
                                             <div className="flex w-1/2 flex-col">
                                                 <p className="text-xs">Ghi chú</p>
@@ -80,7 +81,7 @@ export default async function ProductsTable({
                                                 </div>
                                             </td>
                                             <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
-                                                {product.quantity}
+                                                {formatNumber(product.quantity)}
                                             </td>
                                             <td className="whitespace-nowrap bg-white px-2 py-5 text-sm">
                                                 {product.note}

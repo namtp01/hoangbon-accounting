@@ -12,10 +12,6 @@ export default async function CustomersTable({
 
   return (
     <div className="w-full">
-      {/* <h1 className={`${lusitana.className} mb-8 text-xl md:text-2xl`}>
-        Customers
-      </h1>
-      <Search placeholder="Search customers..." /> */}
       <div className="mt-6 flow-root">
         <div className="overflow-x-auto">
           <div className="inline-block min-w-full align-middle">
@@ -30,19 +26,9 @@ export default async function CustomersTable({
                       <div>
                         <div className="mb-2 flex items-center">
                           <div className="flex items-center gap-3">
-                            {/* <Image
-                              src={customer.image_url}
-                              className="rounded-full"
-                              alt={`${customer.name}'s profile picture`}
-                              width={28}
-                              height={28}
-                            /> */}
                             <p>{customer.name}</p>
                           </div>
                         </div>
-                        {/* <p className="text-sm text-gray-500">
-                          {customer.email}
-                        </p> */}
                       </div>
                     </div>
                     <div className="flex w-full items-center justify-between border-b py-5">

@@ -9,6 +9,15 @@ export const formatCurrency = (amount: number) => {
   });
 };
 
+export const formatNumber = (number: number | string): string => {
+  const numericValue = typeof number === 'string' ? parseFloat(number) : number;
+  
+  return numericValue.toLocaleString('en-US', {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  });
+};
+
 export const formatDateToLocal = (
   dateStr: string,
   locale: string = 'en-GB',
