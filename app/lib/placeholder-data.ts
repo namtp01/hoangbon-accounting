@@ -12,120 +12,174 @@ const users = [
 const customers = [
   {
     id: 'd6e15727-9fe1-4961-8c5b-ea44a9bd81aa',
-    name: 'Evil Rabbit',
-    email: 'evil@rabbit.com',
-    image_url: '/customers/evil-rabbit.png',
+    name: 'Hoa',
   },
   {
     id: '3958dc9e-712f-4377-85e9-fec4b6a6442a',
-    name: 'Delba de Oliveira',
-    email: 'delba@oliveira.com',
-    image_url: '/customers/delba-de-oliveira.png',
+    name: 'Phượng',
   },
   {
     id: '3958dc9e-742f-4377-85e9-fec4b6a6442a',
-    name: 'Lee Robinson',
-    email: 'lee@robinson.com',
-    image_url: '/customers/lee-robinson.png',
+    name: 'Dũng',
   },
   {
     id: '76d65c26-f784-44a2-ac19-586678f7c2f2',
-    name: 'Michael Novotny',
-    email: 'michael@novotny.com',
-    image_url: '/customers/michael-novotny.png',
+    name: 'Linh',
   },
   {
     id: 'CC27C14A-0ACF-4F4A-A6C9-D45682C144B9',
-    name: 'Amy Burns',
-    email: 'amy@burns.com',
-    image_url: '/customers/amy-burns.png',
+    name: 'Danh',
   },
   {
     id: '13D07535-C59E-4157-A011-F8D2EF4E0CBB',
-    name: 'Balazs Orban',
-    email: 'balazs@orban.com',
-    image_url: '/customers/balazs-orban.png',
+    name: 'Văn',
+  },
+  {
+    name: 'Huyền',
   },
 ];
+
+const products = [
+  {
+    id: '13D12715-C99E-5627-B013-F9D3EF4E0FDH',
+    code: '000001',
+    name: 'Táo',
+    quantity: 2110,
+    note: ''
+  },
+  {
+    id: '14D97715-C59A-7111-L014-F2E6ET4E0BDF',
+    code: '000002',
+    name: 'Lê',
+    quantity: 2110,
+    note: ''
+  },
+  {
+    id: '11D16215-C88E-5627-B013-A9D4EF6A2PBH',
+    code: '000003',
+    name: 'Quýt',
+    quantity: 2110,
+    note: ''
+  }
+]
 
 const invoices = [
   {
     customer_id: customers[0].id,
+    product_id: products[0].id,
+    quantity: 10,
     amount: 15795,
     status: 'pending',
     date: '2022-12-06',
+    note: '',
   },
   {
     customer_id: customers[1].id,
+    product_id: products[0].id,
+    quantity: 15,
     amount: 20348,
     status: 'pending',
     date: '2022-11-14',
+    note: '',
   },
   {
     customer_id: customers[4].id,
+    product_id: products[0].id,
+    quantity: 20,
     amount: 3040,
     status: 'paid',
     date: '2022-10-29',
+    note: '',
   },
   {
     customer_id: customers[3].id,
+    product_id: products[1].id,
+    quantity: 10,
     amount: 44800,
     status: 'paid',
     date: '2023-09-10',
+    note: '',
   },
   {
     customer_id: customers[5].id,
+    product_id: products[0].id,
+    quantity: 5,
     amount: 34577,
     status: 'pending',
     date: '2023-08-05',
+    note: '',
   },
   {
     customer_id: customers[2].id,
+    product_id: products[0].id,
+    quantity: 10,
     amount: 54246,
     status: 'pending',
     date: '2023-07-16',
+    note: '',
   },
   {
     customer_id: customers[0].id,
+    product_id: products[1].id,
+    quantity: 10,
     amount: 666,
     status: 'pending',
     date: '2023-06-27',
+    note: '',
   },
   {
     customer_id: customers[3].id,
+    product_id: products[1].id,
+    quantity: 20,
     amount: 32545,
     status: 'paid',
     date: '2023-06-09',
+    note: '',
   },
   {
     customer_id: customers[4].id,
+    product_id: products[1].id,
+    quantity: 10,
     amount: 1250,
     status: 'paid',
     date: '2023-06-17',
+    note: '',
   },
   {
     customer_id: customers[5].id,
+    product_id: products[1].id,
+    quantity: 10,
     amount: 8546,
     status: 'paid',
     date: '2023-06-07',
+    note: '',
   },
   {
     customer_id: customers[1].id,
+    product_id: products[1].id,
+    quantity: 10,
     amount: 500,
     status: 'paid',
     date: '2023-08-19',
+    note: '',
   },
   {
     customer_id: customers[5].id,
+    product_id: products[2].id,
+    quantity: 10,
     amount: 8945,
     status: 'paid',
     date: '2023-06-03',
+    note: '',
   },
   {
     customer_id: customers[2].id,
+    product_id: products[2].id,
+    quantity: 10,
     amount: 1000,
     status: 'paid',
     date: '2022-06-05',
+    note: '',
   },
 ];
 
@@ -144,4 +198,4 @@ const revenue = [
   { month: 'Dec', revenue: 4800 },
 ];
 
-export { users, customers, invoices, revenue };
+export { users, customers, products, invoices, revenue };
