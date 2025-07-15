@@ -1,6 +1,7 @@
 import { formatDateToLocal } from '@/app/lib/utils';
 import { fetchFilteredCosts } from '@/app/lib/data';
 import { DeleteCost, UpdateCost } from './buttons';
+import { formatCurrency } from '../../lib/utils';
 
 export default async function CostsTable({
   query,
@@ -31,7 +32,7 @@ export default async function CostsTable({
                 </div>
                 <div className="flex w-full items-center justify-between pt-4">
                   <div>
-                    <p className="text-xl font-medium">{cost.amount}</p>
+                    <p className="text-xl font-medium">{formatCurrency(cost.amount * 100)}</p>
                     <p>{formatDateToLocal(cost.date)}</p>
                     <p className="text-xl font-medium">{cost.note}</p>
 
@@ -76,7 +77,7 @@ export default async function CostsTable({
                     </div>
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {cost.amount}
+                    {formatCurrency(cost.amount * 100)}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
                     {formatDateToLocal(cost.date)}

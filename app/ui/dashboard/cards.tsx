@@ -29,12 +29,11 @@ export default async function CardWrapper() {
     <>
       {/* NOTE: Uncomment this code in Chapter 9 */}
 
-      <Card title="Tổng tiền đã thu" value={totalPaidInvoices} type="collected" />
-      <Card title="Tổng tiền chờ thanh toán" value={totalPendingInvoices} type="pending" />
-      {/* <Card title="Total Invoices" value={numberOfInvoices} type="invoices" /> */}
-      <Card title="Tổng chi phí" value={"$" + totalCosts} type="costs" />
+      <Card title="TỔNG TIỀN ĐÃ THU" value={totalPaidInvoices} type="collected" />
+      <Card title="Tổng TIỀN CHỜ THANH TOÁN" value={totalPendingInvoices} type="pending" />
+      <Card title="TỔNG CHI PHÍ" value={totalCosts} type="costs" />
       <Card
-        title="Tổng số khách hàng"
+        title="TỔNG SỐ KHÁCH HÀNG"
         value={numberOfCustomers}
         type="customers"
       />
@@ -49,12 +48,12 @@ export function Card({
 }: {
   title: string;
   value: number | string;
-  type: 'invoices' | 'customers' | 'pending' | 'collected' | 'costs';
+  type: 'customers' | 'pending' | 'collected' | 'costs';
 }) {
   const Icon = iconMap[type];
 
   return (
-    <div className="rounded-xl bg-gray-50 p-2 shadow-sm">
+    <div className="rounded-xl bg-gray-50 p-1 shadow-sm">
       <div className="flex p-4">
         {Icon ? <Icon className="h-5 w-5 text-gray-700" /> : null}
         <h3 className="ml-2 text-sm font-medium">{title}</h3>
