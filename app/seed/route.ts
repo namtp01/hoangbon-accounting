@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import postgres from 'postgres';
 import { invoices, customers, products, revenue, users } from '../lib/placeholder-data';
+import { Invoice } from '../lib/definitions';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
@@ -42,10 +43,15 @@ async function seedProducts() {
     );
   `;
 
+  const sanitizedProducts = products.map((product) => ({
+    ...product,
+    note: typeof product.note === 'string' ? product.note : null,
+  }));
+
   const insertedProducts = await Promise.all(
-    products.map(
+    sanitizedProducts.map(
       (product) => sql`
-        INSERT INTO invoices (code, name, quantity, note)
+        INSERT INTO products (code, name, quantity, note)
         VALUES (${product.code}, ${product.name}, ${product.quantity}, ${product.note})
         ON CONFLICT (id) DO NOTHING;
       `,
@@ -68,22 +74,46 @@ async function seedInvoices() {
       amount INT NOT NULL,
       status VARCHAR(255) NOT NULL,
       date DATE NOT NULL,
-      note TEXT,
+      note TEXT
     );
   `;
 
+  // Filter and sanitize invoices
+  const sanitizedInvoices = invoices
+    .filter((invoice): invoice is Invoice => {
+      return (
+        typeof invoice.customer_id === 'string' &&
+        typeof invoice.product_id === 'string' &&
+        typeof invoice.quantity === 'number' &&
+        typeof invoice.amount === 'number' &&
+        typeof invoice.status === 'string' &&
+        typeof invoice.date === 'string'
+      );
+    })
+    .map((invoice) => ({
+      ...invoice,
+      note: typeof invoice.note === 'string' ? invoice.note : null,
+    }));
+
   const insertedInvoices = await Promise.all(
-    invoices.map(
-      (invoice) => sql`
-        INSERT INTO invoices (customer_id, product_id, quantity, amount, status, date, note)
-        VALUES (${invoice.customer_id}, ${invoice.product_id}, ${invoice.quantity}, ${invoice.amount}, ${invoice.status}, ${invoice.date}, ${invoice.note})
-        ON CONFLICT (id) DO NOTHING;
-      `,
-    ),
+    sanitizedInvoices.map((invoice) => sql`
+      INSERT INTO invoices (
+        customer_id, product_id, quantity, amount, status, date, note
+      ) VALUES (
+        ${invoice.customer_id},
+        ${invoice.product_id},
+        ${invoice.quantity},
+        ${invoice.amount},
+        ${invoice.status},
+        ${invoice.date},
+        ${invoice.note}
+      ) ON CONFLICT (id) DO NOTHING;
+    `)
   );
 
   return insertedInvoices;
 }
+
 
 async function seedCustomers() {
   await sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
@@ -95,8 +125,15 @@ async function seedCustomers() {
     );
   `;
 
+  const sanitizedCustomers = customers.map((customer) => {
+    if (!customer.id || !customer.name) {
+      throw new Error('Customer must have both id and name');
+    }
+    return customer;
+  });
+
   const insertedCustomers = await Promise.all(
-    customers.map(
+    sanitizedCustomers.map(
       (customer) => sql`
         INSERT INTO customers (id, name)
         VALUES (${customer.id}, ${customer.name})
