@@ -1,6 +1,6 @@
 import { fetchFilteredProducts } from '@/app/lib/data';
 import { DeleteProduct, UpdateProduct } from '../invoices/buttons';
-import { formatCurrency, formatNumber } from '../../lib/utils';
+import { formatNumber } from '../../lib/utils';
 
 export default async function ProductsTable({
     query,
