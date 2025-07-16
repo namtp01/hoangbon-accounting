@@ -5,6 +5,7 @@ import LatestInvoices from "@/app/ui/dashboard/latest-invoices";
 import CardWrapper from "@/app/ui/dashboard/cards";
 import { Suspense } from "react";
 import { CardsSkeleton, LatestInvoicesSkeleton, RevenueChartSkeleton } from "@/app/ui/skeletons";
+import RefreshButton from "@/app/ui/dashboard/refresh-button";
 
 export default async function Page() {
   return (
@@ -12,6 +13,7 @@ export default async function Page() {
       <h1 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
         Dashboard
       </h1>
+      <RefreshButton />
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <Suspense fallback={<CardsSkeleton />}>
           <CardWrapper />
