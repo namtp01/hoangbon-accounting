@@ -82,12 +82,14 @@ export async function fetchCardData() {
       totalPaidInvoices,
       totalPendingInvoices,
       totalCosts,
-    };
+    };    
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch card data.');
   }
 }
+
+
 
 const ITEMS_PER_PAGE = 10;
 export async function fetchFilteredInvoices(
