@@ -296,6 +296,8 @@ export async function updateCustomer(
 
 
     revalidatePath('/dashboard/customers')
+    revalidatePath('/dashboard/invoices')
+    revalidatePath('/dashboard/invoices/create')
     redirect('/dashboard/customers')
 }
 
@@ -372,6 +374,8 @@ export async function updateProduct(
 
 
     revalidatePath('/dashboard/products')
+    revalidatePath('/dashboard/invoices')
+    revalidatePath('/dashboard/invoices/create')
     redirect('/dashboard/products')
 }
 
