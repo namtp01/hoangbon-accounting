@@ -302,10 +302,31 @@ export async function fetchProductById(id: string) {
       WHERE id = ${id};
     `;
 
+    if (!data[0]) {
+      throw new Error('Product not founds')
+    }
+
     return data[0];
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch product.');
+  }
+}
+
+export async function fetchProductsPages(query: string) {
+  try {
+    const data = await sql`
+      SELECT COUNT(*)
+      FROM products
+      WHERE
+        products.code ILIKE ${`%${query}%`}
+    `;
+
+    const totalPages = Math.ceil(Number(data[0].count) / ITEMS_PER_PAGE);
+    return totalPages
+  } catch (error) {
+    console.log('Database Error:', error);
+    throw new Error('Failed to fetch total number of customers');
   }
 }
 

@@ -41,7 +41,21 @@ const CustomerFormSchema = z.object({
     }),
 })
 
-const ProductFormSchema = z.object({
+// const ProductFormSchema = z.object({
+//     id: z.string(),
+//     name: z.string({
+//         invalid_type_error: "Vui lòng nhập tên sản phẩm."
+//     }),
+//     code: z.string({
+//         invalid_type_error: "Vui lòng nhập mã sản phẩm."
+//     }),
+//     quantity: z.coerce
+//         .number()
+//         .gt(0, { message: "Vui lòng nhập số lượng lớn hơn 0." }),
+//     note: z.string().optional()
+// })
+
+const UpdateProductFormSchema = z.object({
     id: z.string(),
     name: z.string({
         invalid_type_error: "Vui lòng nhập tên sản phẩm."
@@ -54,6 +68,48 @@ const ProductFormSchema = z.object({
         .gt(0, { message: "Vui lòng nhập số lượng lớn hơn 0." }),
     note: z.string().optional()
 })
+
+// Schema for a single product
+const ProductSchema = z.object({
+    name: z
+        .string()
+        .min(1, { message: 'Vui lòng nhập tên hàng hóa.' })
+        .max(100, { message: 'Tên hàng hóa không được vượt quá 100 ký tự.' }),
+    quantity: z.coerce
+        .number()
+        .int()
+        .gt(0, { message: 'Vui lòng nhập số lượng lớn hơn 0.' }),
+    note: z.string().max(500, { message: 'Ghi chú không được vượt quá 500 ký tự.' }).optional(),
+});
+
+// Schema for the entire form
+const CreateProductFormSchema = z.object({
+    code: z
+        .string({
+            invalid_type_error: "Vui lòng nhập mã sản phẩm."
+        }),
+    products: z
+        .array(ProductSchema)
+        .min(1, { message: 'Phải có ít nhất một hàng hóa.' })
+        .max(10, { message: 'Không được thêm quá 10 hàng hóa.' }),
+}).refine(
+    (data) => new Set(data.products.map((p) => p.name)).size === data.products.length,
+    {
+        message: 'Tên hàng hóa phải là duy nhất trong cùng một container.',
+        path: ['products'],
+    }
+);
+
+const UpdateProductSchema = z.object({
+    code: z.string({
+        invalid_type_error: "Vui lòng nhập mã sản phẩm."
+    }),
+    name: z.string({
+        invalid_type_error: "Vui lòng nhập tên sản phẩm."
+    }),
+    quantity: z.coerce.number().int().gt(0, { message: 'Vui lòng nhập số lượng lớn hơn 0.' }),
+    note: z.string().optional()
+});
 
 const CostFormSchema = z.object({
     id: z.string(),
@@ -77,8 +133,11 @@ const UpdateInvoice = FormSchema.omit({ id: true })
 const CreateCustomer = CustomerFormSchema.omit({ id: true })
 const UpdateCustomer = CustomerFormSchema.omit({ id: true })
 
-const CreateProduct = ProductFormSchema.omit({ id: true })
-const UpdateProduct = ProductFormSchema.omit({ id: true })
+// const CreateProduct = ProductFormSchema.omit({ id: true })
+const UpdateProduct = UpdateProductFormSchema.omit({ id: true })
+
+// const CreateProduct = CreateProductFormSchema.omit({ id: true })
+// const UpdateProduct = CreateProductFormSchema.omit({ id: true })
 
 const CreateCost = CostFormSchema.omit({ id: true })
 const UpdateCost = CostFormSchema.omit({ id: true })
@@ -103,7 +162,29 @@ export type CustomerState = {
     message?: string | null;
 }
 
+// export type ProductState = {
+//     errors?: {
+//         code?: string[];
+//         name?: string[];
+//         quantity?: string[];
+//         note?: string[];
+//     };
+//     message?: string | null;
+// }
+
 export type ProductState = {
+    errors?: {
+        code?: string[];
+        products?: {
+            name?: string[];
+            quantity?: string[];
+            note?: string[]
+        }[]
+    };
+    message?: string | null;
+}
+
+export type UpdateProductState = {
     errors?: {
         code?: string[];
         name?: string[];
@@ -161,7 +242,9 @@ export async function createInvoice(prevState: State, formData: FormData) {
     }
 
     // Revalidate the cache for the invoices page and redirect the user.
+    revalidatePath('/dashboard')
     revalidatePath('/dashboard/invoices');
+    revalidatePath('/dashboard/customers');
     redirect('/dashboard/invoices');
 }
 
@@ -203,8 +286,9 @@ export async function updateInvoice(
         return { message: 'Database error: Failed to Update Invoice' }
     }
 
-
+    revalidatePath('/dashboard')
     revalidatePath('/dashboard/invoices')
+    revalidatePath('/dashboard/customers')
     redirect('/dashboard/invoices')
 }
 
@@ -261,6 +345,9 @@ export async function createCustomer(prevState: CustomerState, formData: FormDat
     }
 
     // Revalidate the cache for the invoices page and redirect the user.
+    revalidatePath('/dashboard')
+    revalidatePath('/dashboard/invoices')
+    revalidatePath('/dashboard/invoices/create')
     revalidatePath('/dashboard/customers');
     redirect('/dashboard/customers');
 }
@@ -293,61 +380,86 @@ export async function updateCustomer(
         console.log(error);
         return { message: 'Database error: Failed to Update Product' }
     }
-
-
+    
     revalidatePath('/dashboard/customers')
     revalidatePath('/dashboard/invoices')
     revalidatePath('/dashboard/invoices/create')
     redirect('/dashboard/customers')
 }
 
-export async function createProduct(prevState: ProductState, formData: FormData) {
-    // Validate from using Zod
-    const validatedFields = CreateProduct.safeParse({
-        code: formData.get('code'),
-        name: formData.get('name'),
-        quantity: formData.get('quantity'),
-        note: formData.get('note') || '',
-    });
-
-    // If form validation fails, return errors early. Otherwise, continue.
-    if (!validatedFields.success) {
-        return {
-            errors: validatedFields.error.flatten().fieldErrors,
-            message: 'Missing Fields. Failed to Create Invoice'
-        }
+export async function createProduct(prevState: ProductState, formData: FormData): Promise<ProductState> {
+    const data: { code: string; products: { name: string; quantity: string; note: string }[] } = {
+        code: formData.get('code')?.toString() || '',
+        products: []
+    };
+    let index = 0
+    while (formData.get(`products[${index}][name]`)) {
+        data.products.push({
+            name: formData.get(`products[${index}][name]`)?.toString() || '',
+            quantity: formData.get(`products[${index}][quantity]`)?.toString() || '',
+            note: formData.get(`products[${index}][note]`)?.toString() || '',
+        })
+        index++;
     }
 
-    // Prepare data for insertion into the database
-    const { code, name, quantity, note } = validatedFields.data;
+    // Validate form data
+    const validatedFields = CreateProductFormSchema.safeParse(data);
+    if (!validatedFields.success) {
+        const fieldErrors = validatedFields.error.flatten().fieldErrors;
+        return {
+            message: 'Dữ liệu không hợp lệ. Không thể tạo sản phẩm.',
+            errors: {
+                code: fieldErrors.code,
+                products: fieldErrors.products
+                    ? fieldErrors.products.map((error) =>
+                        typeof error === 'string'
+                            ? { name: [error] }
+                            : error
+                    )
+                    : undefined,
+            },
+        };
+    }
 
-    const safeNote = note ?? '';
+    const { code: validatedCode, products: validatedProducts } = validatedFields.data;
 
     // Insert data into the database
     try {
-        await sql`
-            INSERT INTO products (code, name, quantity, note)
-            VALUES (${code}, ${name}, ${quantity}, ${safeNote})
-        `;
+        await sql.begin(async (sql) => {
+            for (const product of validatedProducts) {
+                const { name, quantity, note } = product;
+                await sql`
+                    INSERT INTO products (code, name, quantity, note)
+                    VALUES (${validatedCode}, ${name}, ${quantity}, ${note || ''})
+                `;
+            }
+        })
     } catch (error) {
         console.log(error)
+        return {
+            message: 'Không thể tạo sản phẩm do lỗi cơ sở dữ liệu.',
+            errors: {},
+        };
     }
 
     // Revalidate the cache for the invoices page and redirect the user.
+    revalidatePath('/dashboard')
+    revalidatePath('/dashboard/invoices')
+    revalidatePath('/dashboard/invoices/create')
     revalidatePath('/dashboard/products');
     redirect('/dashboard/products');
 }
 
 export async function updateProduct(
     id: string,
-    prevState: State,
+    prevState: UpdateProductState,
     formData: FormData
-) {
-    const validatedFields = UpdateProduct.safeParse({
-        code: formData.get('code'),
-        name: formData.get('name'),
-        quantity: formData.get('quantity'),
-        note: formData.get('note') || '',
+): Promise<UpdateProductState> {
+    const validatedFields = UpdateProductSchema.safeParse({
+        code: formData.get('code')?.toString() || '',
+        name: formData.get('name')?.toString() || '',
+        quantity: formData.get('quantity')?.toString() || '',
+        note: formData.get('note')?.toString() || '',
     })
 
     if (!validatedFields.success) {
@@ -368,8 +480,17 @@ export async function updateProduct(
             WHERE id = ${id}
         `;
     } catch (error) {
-        console.log(error);
-        return { message: 'Database error: Failed to Update Product' }
+        if (typeof error === 'object' && error !== null && 'code' in error && (error as any).code === '23505') { // PostgreSQL unique violation
+            return {
+                message: 'Tên hàng hóa đã tồn tại cho mã này.',
+                errors: { name: ['Tên hàng hóa phải là duy nhất cho mã này.'] },
+            };
+        }
+        console.error('Database error:', error);
+        return {
+            message: 'Không thể cập nhật sản phẩm do lỗi cơ sở dữ liệu.',
+            errors: {},
+        };
     }
 
 
@@ -377,6 +498,11 @@ export async function updateProduct(
     revalidatePath('/dashboard/invoices')
     revalidatePath('/dashboard/invoices/create')
     redirect('/dashboard/products')
+}
+
+export async function deleteProduct(id: string) {
+    await sql`DELETE FROM products WHERE id = ${id}`;
+    revalidatePath('/dashboard/products')
 }
 
 export async function createCost(prevState: CostState, formData: FormData) {
@@ -414,6 +540,7 @@ export async function createCost(prevState: CostState, formData: FormData) {
 
     // Revalidate the cache for the invoices page and redirect the user.
     revalidatePath('/dashboard/costs');
+    revalidatePath('/dashboard')
     redirect('/dashboard/costs');
 }
 
@@ -458,5 +585,6 @@ export async function updateCost(
 
 
     revalidatePath('/dashboard/costs')
+    revalidatePath('/dashboard')
     redirect('/dashboard/costs')
 }

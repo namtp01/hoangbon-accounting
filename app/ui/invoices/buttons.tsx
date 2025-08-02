@@ -2,7 +2,7 @@
 
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { deleteInvoice } from '@/app/lib/actions'
+import { deleteInvoice, deleteProduct } from '@/app/lib/actions'
 import { useRef, useState } from 'react';
 
 export function CreateInvoice() {
@@ -57,7 +57,7 @@ export function DeleteInvoice({ id }: { id: string }) {
                 Hủy
               </button>
               <button
-                onClick={() => formRef.current?.submit()}
+                onClick={() => formRef.current?.requestSubmit()}
                 className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
               >
                 Xác nhận
@@ -89,7 +89,7 @@ export function UpdateProduct({ id }: { id: string }) {
 }
 
 export function DeleteProduct({ id }: { id: string }) {
-  const deleteInvoiceWithId = deleteInvoice.bind(null, id);
+  const deleteProductWithId = deleteProduct.bind(null, id);
 
   const [showModal, setShowModal] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
@@ -117,7 +117,7 @@ export function DeleteProduct({ id }: { id: string }) {
                 Hủy
               </button>
               <button
-                onClick={() => formRef.current?.submit()}
+                onClick={() => formRef.current?.requestSubmit()}
                 className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
               >
                 Xác nhận
@@ -130,7 +130,7 @@ export function DeleteProduct({ id }: { id: string }) {
       {/* Hidden form for POST request */}
       <form
         ref={formRef}
-        action={deleteInvoiceWithId}
+        action={deleteProductWithId}
         style={{ display: 'none' }}
       />
     </>
