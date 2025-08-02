@@ -55,19 +55,19 @@ const CustomerFormSchema = z.object({
 //     note: z.string().optional()
 // })
 
-const UpdateProductFormSchema = z.object({
-    id: z.string(),
-    name: z.string({
-        invalid_type_error: "Vui lòng nhập tên sản phẩm."
-    }),
-    code: z.string({
-        invalid_type_error: "Vui lòng nhập mã sản phẩm."
-    }),
-    quantity: z.coerce
-        .number()
-        .gt(0, { message: "Vui lòng nhập số lượng lớn hơn 0." }),
-    note: z.string().optional()
-})
+// const UpdateProductFormSchema = z.object({
+//     id: z.string(),
+//     name: z.string({
+//         invalid_type_error: "Vui lòng nhập tên sản phẩm."
+//     }),
+//     code: z.string({
+//         invalid_type_error: "Vui lòng nhập mã sản phẩm."
+//     }),
+//     quantity: z.coerce
+//         .number()
+//         .gt(0, { message: "Vui lòng nhập số lượng lớn hơn 0." }),
+//     note: z.string().optional()
+// })
 
 // Schema for a single product
 const ProductSchema = z.object({
@@ -134,7 +134,7 @@ const CreateCustomer = CustomerFormSchema.omit({ id: true })
 const UpdateCustomer = CustomerFormSchema.omit({ id: true })
 
 // const CreateProduct = ProductFormSchema.omit({ id: true })
-const UpdateProduct = UpdateProductFormSchema.omit({ id: true })
+// const UpdateProduct = UpdateProductFormSchema.omit({ id: true })
 
 // const CreateProduct = CreateProductFormSchema.omit({ id: true })
 // const UpdateProduct = CreateProductFormSchema.omit({ id: true })
@@ -380,7 +380,7 @@ export async function updateCustomer(
         console.log(error);
         return { message: 'Database error: Failed to Update Product' }
     }
-    
+
     revalidatePath('/dashboard/customers')
     revalidatePath('/dashboard/invoices')
     revalidatePath('/dashboard/invoices/create')
@@ -480,12 +480,6 @@ export async function updateProduct(
             WHERE id = ${id}
         `;
     } catch (error) {
-        if (typeof error === 'object' && error !== null && 'code' in error && (error as any).code === '23505') { // PostgreSQL unique violation
-            return {
-                message: 'Tên hàng hóa đã tồn tại cho mã này.',
-                errors: { name: ['Tên hàng hóa phải là duy nhất cho mã này.'] },
-            };
-        }
         console.error('Database error:', error);
         return {
             message: 'Không thể cập nhật sản phẩm do lỗi cơ sở dữ liệu.',
