@@ -5,7 +5,7 @@ import { Metadata } from "next";
 import { Suspense } from "react";
 import Table from "@/app/ui/products/table"
 import Pagination from "@/app/ui/customers/pagination"
-import { fetchCustomersPages } from "@/app/lib/data";
+import { fetchProductsPages } from "@/app/lib/data";
 import { CreateProducts } from "@/app/ui/products/buttons";
 
 
@@ -22,7 +22,7 @@ export default async function Page(props: {
   const searchParams = await props.searchParams;
   const query = searchParams?.query || '';
   const currentPage = Number(searchParams?.page) || 1;
-  const totalPages = await fetchCustomersPages(query);
+  const totalPages = await fetchProductsPages(query);
 
   return (
     <div className="w-full">
@@ -32,7 +32,7 @@ export default async function Page(props: {
         </h1>
       </div>
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-        <Search placeholder="Search customers..." />
+        <Search placeholder="Tìm kiếm hàng hóa..." />
         <CreateProducts />
       </div>
       <Suspense key={query + currentPage} fallback={<ProductsTableSkeleton />}>

@@ -11,6 +11,8 @@ export default async function ProductsTable({
 }) {
     const products = await fetchFilteredProducts(query, currentPage);
 
+    const sortedProducts = [...products].sort((a, b) => a.code.localeCompare(b.code))
+
     return (
         <div className="w-full">
             <div className="mt-6 flow-root">
@@ -18,7 +20,7 @@ export default async function ProductsTable({
                     <div className="inline-block min-w-full align-middle">
                         <div className="overflow-hidden rounded-md bg-gray-50 p-2 md:pt-0">
                             <div className="md:hidden">
-                                {products?.map((product) => (
+                                {sortedProducts?.map((product) => (
                                     <div
                                         key={product.id}
                                         className="mb-2 w-full rounded-md bg-white p-4 border-2 border-neutral-600"
@@ -66,7 +68,7 @@ export default async function ProductsTable({
                                 </thead>
 
                                 <tbody className="divide-y divide-gray-200 text-gray-900">
-                                    {products.map((product) => (
+                                    {sortedProducts.map((product) => (
                                         <tr key={product.id} className="group">
                                             <td className="whitespace-nowrap bg-white py-5 pl-4 pr-3 text-sm text-black group-first-of-type:rounded-md group-last-of-type:rounded-md sm:pl-6">
                                                 <div className="flex items-center gap-3">

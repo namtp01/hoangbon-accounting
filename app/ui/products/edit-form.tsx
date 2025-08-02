@@ -12,9 +12,7 @@ import { updateProduct, ProductState } from '@/app/lib/actions';
 import { useActionState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css'
 
-
-
-export default function EditzProductForm({
+export default function EditProductForm({
     product
 }: {
     product: ProductForm;
@@ -30,7 +28,7 @@ export default function EditzProductForm({
                     {/* --- Customer picker --- */}
                     <div className='mb-4 md:w-1/2'>
                         <label
-                            htmlFor='customer'
+                            htmlFor='code'
                             className='mb-2 block text-sm font-medium'
                         >
                             Nhập Mã
@@ -58,7 +56,7 @@ export default function EditzProductForm({
                     {/* --- Product picker --- */}
                     <div className='mb-4 md:w-1/2'>
                         <label
-                            htmlFor='product'
+                            htmlFor='name'
                             className='mb-2 block text-sm font-medium'
                         >
                             Nhập tên hàng hóa
