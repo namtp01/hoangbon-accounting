@@ -1,5 +1,5 @@
 import { fetchFilteredCustomers } from '@/app/lib/data';
-import { UpdateCustomer } from '@/app/ui/customers/buttons';
+import { InvoicePaidDetail, InvoicePendingDetail, UpdateCustomer } from '@/app/ui/customers/buttons';
 
 export default async function CustomersTable({
   query,
@@ -76,11 +76,13 @@ export default async function CustomersTable({
                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
                         {customer.total_invoices}
                       </td>
-                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
+                      <td className="whitespace-nowrap bg-white px-4 py-5 text-sm flex gap-3 items-center">
                         {customer.total_pending}
+                        <InvoicePendingDetail id={customer.id} />
                       </td>
                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm group-first-of-type:rounded-md group-last-of-type:rounded-md">
                         {customer.total_paid}
+                        <InvoicePaidDetail id={customer.id} />
                       </td>
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
                         <div className="flex justify-end gap-3">

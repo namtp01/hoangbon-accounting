@@ -282,7 +282,22 @@ export async function fetchFilteredProducts(query: string, currentPage: number) 
     LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
 	  `;
 
-    return products;
+    const sold = await sql<{ product_id: string; sold_quantity: number }[]>`
+      SELECT
+        product_id,
+        SUM(quantity) AS sold_quantity
+      FROM invoices
+      GROUP BY product_id
+    `;
+
+    const soldMap = Object.fromEntries(
+      sold.map((row) => [row.product_id, Number(row.sold_quantity) || 0])
+    );
+
+    return products.map((product) => ({
+      ...product,
+      remainingQuantity: product.quantity - (soldMap[product.id] || 0),
+    }));
   } catch (err) {
     console.error('Database Error:', err);
     throw new Error('Failed to fetch product table.');
@@ -429,5 +444,63 @@ export async function fetchCostById(id: string) {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch cost.');
+  }
+}
+
+export async function fetchPendingInvoicesByCustomer(customerId: string) {
+  try {
+    const data = await sql<InvoicesTable[]>`
+      SELECT
+        invoices.id,
+        invoices.quantity,
+        invoices.amount,
+        invoices.date,
+        invoices.status,
+        invoices.note,
+        customers.name,
+        products.name AS product_name,
+        products.code AS product_code
+      FROM invoices
+      JOIN customers ON invoices.customer_id = customers.id
+      JOIN products ON invoices.product_id = products.id
+      WHERE
+        customers.id = ${customerId} AND
+        invoices.status = 'pending'
+      ORDER BY invoices.date DESC
+    `;
+
+    return data;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch pending invoices by customer.');
+  }
+}
+
+export async function fetchPaidInvoicesByCustomer(customerId: string) {
+  try {
+    const data = await sql<InvoicesTable[]>`
+      SELECT
+        invoices.id,
+        invoices.quantity,
+        invoices.amount,
+        invoices.date,
+        invoices.status,
+        invoices.note,
+        customers.name,
+        products.name AS product_name,
+        products.code AS product_code
+      FROM invoices
+      JOIN customers ON invoices.customer_id = customers.id
+      JOIN products ON invoices.product_id = products.id
+      WHERE
+        customers.id = ${customerId} AND
+        invoices.status = 'paid'
+      ORDER BY invoices.date DESC
+    `;
+
+    return data;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch paid invoices by customer.');
   }
 }

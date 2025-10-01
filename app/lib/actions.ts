@@ -245,6 +245,7 @@ export async function createInvoice(prevState: State, formData: FormData) {
     revalidatePath('/dashboard')
     revalidatePath('/dashboard/invoices');
     revalidatePath('/dashboard/customers');
+    revalidatePath('/dashboard/products');
     redirect('/dashboard/invoices');
 }
 

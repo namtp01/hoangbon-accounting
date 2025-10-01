@@ -59,7 +59,10 @@ export default async function ProductsTable({
                                             Tên Hàng
                                         </th>
                                         <th scope="col" className="px-3 py-5 font-medium">
-                                            Số Lượng
+                                            Số Lượng Tổng
+                                        </th>
+                                        <th scope="col" className='px-3 py-5 font-medium'>
+                                            Số Lượng Còn Lại
                                         </th>
                                         <th scope="col" className="px-4 py-5 font-medium">
                                             Ghi Chú
@@ -84,6 +87,9 @@ export default async function ProductsTable({
                                             </td>
                                             <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
                                                 {formatNumber(product.quantity)}
+                                            </td>
+                                            <td className='whitespace-nowrap bg-white px-4 py-5 text-sm'>
+                                                {formatNumber(product.remainingQuantity ?? product.quantity)}
                                             </td>
                                             <td className="whitespace-nowrap bg-white px-2 py-5 text-sm">
                                                 {product.note}

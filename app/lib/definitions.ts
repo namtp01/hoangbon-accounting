@@ -119,6 +119,7 @@ export type Product = {
   name: string;
   quantity: number;
   note: string;
+  remainingQuantity?: number;
 }
 
 export type ProductField = {
