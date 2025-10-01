@@ -7,6 +7,7 @@ export async function GET(request: Request, context: { params: { customerId: str
         const data = await fetchPaidInvoicesByCustomer(customerId);
         return NextResponse.json(Array.isArray(data) ? data : []);
     } catch (error) {
+        console.error("Failed to fetch paid invoices:", error);
         return NextResponse.json([], { status: 500 });
     }
 }

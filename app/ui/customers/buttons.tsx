@@ -5,6 +5,7 @@ import { PencilIcon, PlusIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import InvoiceStatus from "../invoices/status";
+import { InvoicesTable } from "@/app/lib/definitions";
 
 export function CreateCustomer() {
     return (
@@ -31,7 +32,7 @@ export function UpdateCustomer({ id }: { id: string }) {
 
 export function InvoicePendingDetail ({ id }: { id: string }) {
   const [showModal, setShowModal] = useState(false);
-  const [pendingInvoices, setPendingInvoices] = useState<any[]>([])
+  const [pendingInvoices, setPendingInvoices] = useState<InvoicesTable[]>([])
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -133,7 +134,7 @@ export function InvoicePendingDetail ({ id }: { id: string }) {
 
 export function InvoicePaidDetail ({ id }: { id: string }) {
   const [showModal, setShowModal] = useState(false);
-  const [paidInvoices, setPaidInvoices] = useState<any[]>([])
+  const [paidInvoices, setPaidInvoices] = useState<InvoicesTable[]>([])
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
