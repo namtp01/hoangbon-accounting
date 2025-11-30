@@ -1,5 +1,5 @@
-import '@/app/ui/global.css';
-import { inter } from '@/app/ui/fonts';
+import '../app/ui/global.css';
+import { montserrat } from '@/app/ui/fonts';
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -17,8 +17,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={`${inter.className}`}>{children}</body>
+    <html lang="en" className={`${montserrat.className}`}>
+      <body className={`${montserrat.className}`}>{children}</body>
     </html>
   );
 }

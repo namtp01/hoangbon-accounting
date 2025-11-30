@@ -1,38 +1,40 @@
-import { lusitana } from "@/app/ui/fonts";
+import { montserrat } from "@/app/ui/fonts";
 import { CreateInvoice } from "@/app/ui/invoices/buttons";
 import Search from "@/app/ui/search";
 import { InvoicesTableSkeleton } from "@/app/ui/skeletons";
 import { Suspense } from "react";
-import Table from "@/app/ui/invoices/table"
+import Table from "@/app/ui/invoices/table";
 import { fetchInvoicesPages } from "@/app/lib/data";
 import Pagination from "@/app/ui/invoices/pagination";
-import { Metadata } from 'next'
+import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'HÓA ĐƠN BÁN HÀNG'
-}
+  title: "HÓA ĐƠN BÁN HÀNG",
+};
 
 export default async function Page(props: {
   searchParams?: Promise<{
     query?: string;
     page?: string;
-  }>
+  }>;
 }) {
   const searchParams = await props.searchParams;
-  const query = searchParams?.query || '';
+  const query = searchParams?.query || "";
   const currentPage = Number(searchParams?.page) || 1;
   const totalPages = await fetchInvoicesPages(query);
 
   return (
     <div className="w-full">
-      <div className="flex w-full items-center justify-between">
-        <h1 className={`${lusitana.className} text-2xl`}>
-          HÓA ĐƠN BÁN HÀNG
-        </h1>
-      </div>
-      <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-        <Search placeholder="Search invoices..." />
-        <CreateInvoice />
+      <div className="rounded-3xl bg-white p-3">
+        <div className="flex w-full items-center justify-between">
+          <h1 className={`${montserrat.className} text-2xl`}>
+            HÓA ĐƠN BÁN HÀNG
+          </h1>
+        </div>
+        <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
+          <Search placeholder="Tìm kiếm tên khách hàng, số xe..." />
+          <CreateInvoice />
+        </div>
       </div>
       <Suspense key={query + currentPage} fallback={<InvoicesTableSkeleton />}>
         <Table query={query} currentPage={currentPage} />

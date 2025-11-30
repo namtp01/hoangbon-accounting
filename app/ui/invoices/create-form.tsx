@@ -65,7 +65,7 @@ export default function Form({ customers, products }: Props) {
 
   return (
     <form action={formAction}>
-      <div className='rounded-md bg-gray-50 p-4 md:p-6'>
+      <div className='rounded-3xl bg-gray-50 p-4 md:p-6'>
         <div className='flex flex-col md:flex-row md:gap-4'>
           {/* --- Customer picker --- */}
           <div className='mb-4 md:w-1/2'>
@@ -94,7 +94,7 @@ export default function Form({ customers, products }: Props) {
                   displayValue={(customer: CustomerField) => customer?.name ?? ''}
                   onChange={(e) => setCustomerQuery(e.target.value)}
                   placeholder='Tìm và chọn khách hàng'
-                  className='peer block w-full rounded-md border border-gray-200 py-2 pl-8 pr-3 text-sm text-gray-900 placeholder:text-gray-500 focus:outline-2'
+                  className='peer block w-full rounded-3xl border border-gray-400 py-2 pl-8 pr-3 text-sm text-gray-900 placeholder:text-gray-500 focus:outline-2'
                 />
               </div>
 
@@ -161,7 +161,7 @@ export default function Form({ customers, products }: Props) {
                   displayValue={(product: ProductField) => product?.name ?? ''}
                   onChange={(e) => setProductQuery(e.target.value)}
                   placeholder='Tìm và chọn hàng hóa'
-                  className='peer block w-full rounded-md border border-gray-200 py-2 pl-8 pr-3 text-sm text-gray-900 placeholder:text-gray-500 focus:outline-2'
+                  className='peer block w-full rounded-3xl border border-gray-400 py-2 pl-8 pr-3 text-sm text-gray-900 placeholder:text-gray-500 focus:outline-2'
                 />
               </div>
 
@@ -203,7 +203,7 @@ export default function Form({ customers, products }: Props) {
         </div>
 
         {/* --- Quantity --- */}
-        <div className='mb-4'>
+        {/* <div className='mb-4'>
           <label htmlFor='quantity' className='mb-2 block text-sm font-medium'>
             Nhập số lượng
           </label>
@@ -218,10 +218,10 @@ export default function Form({ customers, products }: Props) {
             />
             <ScaleIcon className='pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900' />
           </div>
-        </div>
+        </div> */}
 
         {/* --- Amount --- */}
-        <div className='mb-4'>
+        {/* <div className='mb-4'>
           <label htmlFor='amount' className='mb-2 block text-sm font-medium'>
             Nhập giá tiền
           </label>
@@ -236,10 +236,48 @@ export default function Form({ customers, products }: Props) {
             />
             <CurrencyDollarIcon className='pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900' />
           </div>
+        </div> */}
+
+        <div className='flex flex-col md:flex-row md:gap-4'>
+          {/* --- Quantity --- */}
+          <div className='mb-4 md:w-1/2'>
+            <label htmlFor='quantity' className='mb-2 block text-sm font-medium'>
+              Nhập số lượng
+            </label>
+            <div className='relative'>
+              <input
+                id='quantity'
+                name='quantity'
+                type='number'
+                step='1'
+                placeholder='Nhập số lượng'
+                className='peer block w-full rounded-3xl border border-gray-400 py-2 pl-10 text-sm placeholder:text-gray-500 outline-2'
+              />
+              <ScaleIcon className='pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900' />
+            </div>
+          </div>
+
+          {/* --- Amount --- */}
+          <div className='mb-4 md:w-1/2'>
+            <label htmlFor='amount' className='mb-2 block text-sm font-medium'>
+              Nhập giá tiền
+            </label>
+            <div className='relative'>
+              <input
+                id='amount'
+                name='amount'
+                type='number'
+                step='0.01'
+                placeholder='Nhập giá tiền'
+                className='peer block w-full rounded-3xl border border-gray-400 py-2 pl-10 text-sm placeholder:text-gray-500 outline-2'
+              />
+              <CurrencyDollarIcon className='pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900' />
+            </div>
+          </div>
         </div>
 
         {/* --- Date Picker --- */}
-        <div className='mb-4'>
+        {/* <div className='mb-4'>
           <label htmlFor='date' className='mb-2 block text-sm font-medium'>
             Chọn ngày
           </label>
@@ -262,6 +300,66 @@ export default function Form({ customers, products }: Props) {
               </p>
             ))}
           </div>
+        </div> */}
+
+        <div className='flex flex-col md:flex-row md:gap-4'>
+          {/* --- Date Picker --- */}
+          <div className='mb-4 md:w-1/2'>
+            <label htmlFor='date' className='mb-2 block text-sm font-medium'>
+              Chọn ngày
+            </label>
+            <div className='relative'>
+              <DatePicker
+                id='date'
+                name='date'
+                selected={selectedDate}
+                onChange={(date: Date | null) => setSelectedDate(date)}
+                placeholderText='Chọn ngày'
+                dateFormat='yyyy-MM-dd'
+                wrapperClassName='w-full'
+                className='peer block w-full rounded-3xl border border-gray-400 py-2 pl-10 text-sm text-gray-900 placeholder:text-gray-500 focus:outline-2'
+              />
+              <CalendarIcon className='pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900' />
+            </div>
+            <div id='date-error' aria-live='polite' aria-atomic='true'>
+              {state.errors?.date?.map((error: string) => (
+                <p key={error} className='mt-2 text-sm text-red-500'>
+                  {error}
+                </p>
+              ))}
+            </div>
+          </div>
+
+          {/* --- Status --- */}
+          <fieldset className='mb-4 md:w-1/2'>
+            <legend className='mb-2 block text-sm font-medium'>Đặt trạng thái</legend>
+            <div className='rounded-3xl border border-gray-400 bg-white px-[14px] py-1'>
+              <div className='flex gap-4'>
+                <label className='flex cursor-pointer items-center gap-1.5'>
+                  <input
+                    type='radio'
+                    name='status'
+                    value='pending'
+                    className='h-4 w-4 border-gray-400 text-gray-600'
+                  />
+                  <span className='flex items-center gap-1.5 rounded-full bg-orange-200 px-3 py-1.5 text-xs font-medium text-gray-600'>
+                    Chưa thanh toán <ClockIcon className='h-4 w-4' />
+                  </span>
+                </label>
+                <label className='flex cursor-pointer items-center gap-1.5'>
+                  <input
+                    type='radio'
+                    name='status'
+                    value='paid'
+                    className='h-4 w-4 border-gray-400 text-gray-600'
+                  />
+                  <span className='flex items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white'>
+                    Đã thanh toán <CheckOutline className='h-4 w-4' />
+                  </span>
+                </label>
+              </div>
+            </div>
+          </fieldset>
         </div>
 
         {/* Note Field */}
@@ -274,7 +372,7 @@ export default function Form({ customers, products }: Props) {
               id='note'
               name='note'
               placeholder='Nhập ghi chú (tùy chọn)'
-              className='peer block w-full rounded-md border border-gray-200 py-2 px-3 text-sm text-gray-900 placeholder:text-gray-500 focus:outline-2'
+              className='peer block w-full rounded-3xl border border-gray-400 py-2 px-3 text-sm text-gray-900 placeholder:text-gray-500 focus:outline-2'
               rows={4}
             />
           </div>
@@ -288,7 +386,7 @@ export default function Form({ customers, products }: Props) {
         </div>
 
         {/* --- Status --- */}
-        <fieldset>
+        {/* <fieldset>
           <legend className='mb-2 block text-sm font-medium'>Đặt trạng thái</legend>
           <div className='rounded-md border border-gray-200 bg-white px-[14px] py-3'>
             <div className='flex gap-4'>
@@ -316,14 +414,14 @@ export default function Form({ customers, products }: Props) {
               </label>
             </div>
           </div>
-        </fieldset>
+        </fieldset> */}
       </div>
 
       {/* --- Actions --- */}
-      <div className='mt-6 flex justify-end gap-4'>
+      <div className='mt-6 flex justify-start gap-4'>
         <Link
           href='/dashboard/invoices'
-          className='flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200'
+          className='flex h-10 items-center border border-gray-400 rounded-3xl bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200'
         >
           Hủy
         </Link>

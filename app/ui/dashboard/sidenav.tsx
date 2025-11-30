@@ -5,10 +5,12 @@ import { PowerIcon } from '@heroicons/react/24/outline';
 import { signOut } from '@/auth'
 
 export default function SideNav() {
+  const defaultGradient = 'bg-gradient-to-br from-green-400 via-blue-500 to-purple-600';
+
   return (
     <div className="flex h-full flex-col px-3 py-4 md:px-2">
       <Link
-        className="mb-2 flex h-20 items-end justify-start rounded-md bg-blue-600 p-4 md:h-40"
+        className={`mb-2 flex h-20 items-center justify-center rounded-md ${defaultGradient} p-4 md:h-40`}
         href="/"
       >
         <div className="w-32 text-white md:w-40">

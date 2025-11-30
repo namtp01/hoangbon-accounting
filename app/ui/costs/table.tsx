@@ -48,16 +48,16 @@ export default async function CostsTable({
           <table className="hidden min-w-full text-gray-900 md:table">
             <thead className="rounded-lg text-center text-sm font-normal border-b-2 border-gray-800">
               <tr>
-                <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
+                <th scope="col" className="px-4 py-5 text-start font-medium sm:pl-6">
                   Tên Chi Phí
                 </th>
-                <th scope="col" className="px-3 py-5 font-medium">
+                <th scope="col" className="px-3 py-5 text-start font-medium">
                   Số Tiền
                 </th>
-                <th scope="col" className="px-3 py-5 font-medium">
+                <th scope="col" className="px-3 py-5 text-start font-medium">
                   Ngày
                 </th>
-                <th scope="col" className="px-3 py-5 font-medium">
+                <th scope="col" className="px-3 py-5 text-start font-medium">
                   Ghi Chú
                 </th>
                 <th scope="col" className="relative py-3 pl-6 pr-3">
@@ -71,18 +71,18 @@ export default async function CostsTable({
                   key={cost.id}
                   className="w-full text-center border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                 >
-                  <td className="whitespace-nowrap py-3 pl-6 pr-3 text-center">
+                  <td className="whitespace-nowrap py-3 pl-6 pr-3 text-start">
                     <div className="items-center gap-3">
                       <p>{cost.name}</p>
                     </div>
                   </td>
-                  <td className="whitespace-nowrap px-3 py-3">
+                  <td className="whitespace-nowrap px-3 py-3 text-start">
                     {formatCurrency(cost.amount * 100)}
                   </td>
-                  <td className="whitespace-nowrap px-3 py-3">
+                  <td className="whitespace-nowrap px-3 py-3 text-start">
                     {formatDateToLocal(cost.date)}
                   </td>
-                  <td className='whitespace-nowrap px-3 py-3'>
+                  <td className='whitespace-nowrap px-3 py-3 text-start'>
                     {cost.note}
                   </td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">

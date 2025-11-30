@@ -64,25 +64,50 @@ export async function fetchCardData() {
          SUM(CASE WHEN status = 'paid' THEN amount * quantity ELSE 0 END) AS "paid",
          SUM(CASE WHEN status = 'pending' THEN amount * quantity ELSE 0 END) AS "pending"
          FROM invoices`;
+
     const totalCostPromise = sql`SELECT SUM(amount * 100) AS total_cost FROM costs`;
+    const numberOfTrucksPromise = sql`SELECT COUNT(DISTINCT code) FROM products`;
+
+    const totalReceivedTodayPromise = sql`
+      SELECT
+        COALESCE(SUM(amount * quantity), 0) AS total_received_today
+      FROM invoices
+      WHERE status = 'paid' AND date::date = CURRENT_DATE
+    `;
+
+    const totalCostsTodayPromise = sql`
+      SELECT
+        COALESCE(SUM(amount * 100), 0) AS total_costs_today
+      FROM costs
+      WHERE date::date = CURRENT_DATE
+    `;
 
     const data = await Promise.all([
       customerCountPromise,
       invoiceStatusPromise,
       totalCostPromise,
+      numberOfTrucksPromise,
+      totalReceivedTodayPromise,
+      totalCostsTodayPromise,
     ]);
 
     const numberOfCustomers = Number(data[0][0].count ?? '0');
     const totalPaidInvoices = formatCurrency(data[1][0].paid ?? '0');
     const totalPendingInvoices = formatCurrency(data[1][0].pending ?? '0');
     const totalCosts = formatCurrency(data[2][0].total_cost ?? '0');
+    const totalTrucks = Number(data[3][0].count ?? '0');
+    const totalReceivedToday = formatCurrency(data[4][0].total_received_today ?? '0');
+    const totalCostsToday = formatCurrency(data[5][0].total_costs_today ?? '0');
 
     return {
       numberOfCustomers,
       totalPaidInvoices,
       totalPendingInvoices,
       totalCosts,
-    };    
+      totalTrucks,
+      totalReceivedToday,
+      totalCostsToday,
+    };
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch card data.');
@@ -91,7 +116,7 @@ export async function fetchCardData() {
 
 
 
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 8;
 export async function fetchFilteredInvoices(
   query: string,
   currentPage: number,

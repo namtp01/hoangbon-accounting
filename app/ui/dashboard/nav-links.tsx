@@ -40,6 +40,11 @@ const links = [
 export default function NavLinks() {
   const pathname = usePathname();
 
+  // const defaultGradient = 'bg-gradient-to-br from-orange-400 via-yellow-400 to-lime-400';
+
+  const hoverGradient = 'hover:bg-gradient-to-r hover:from-green-400 hover:via-blue-500 hover:to-purple-6600';
+  const activeGradient = 'bg-gradient-to-r from-green-400 via-blue-500 to-purple-600';
+
   return (
     <>
       {links.map((link) => {
@@ -48,10 +53,18 @@ export default function NavLinks() {
           <Link
             key={link.name}
             href={link.href}
+            // className={clsx(
+            //   "flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3",
+            //   {
+            //     'bg-sky-100 text-blue-600': pathname === link.href,
+            //   }
+            // )}
+
             className={clsx(
-              "flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3",
+              `flex h-[48px] grow items-center justify-center gap-2 rounded-md p-3 text-sm font-medium **text-white** md:flex-none md:justify-start md:p-2 md:px-3`,
+              `${hoverGradient} hover:text-white`,
               {
-                'bg-sky-100 text-blue-600': pathname === link.href,
+                [`${activeGradient} text-white`]: pathname === link.href,
               }
             )}
           >

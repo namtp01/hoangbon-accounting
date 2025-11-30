@@ -39,10 +39,10 @@ export function DeleteCost({ id }: { id: string }) {
       <button
         type="button"
         onClick={() => setShowModal(true)}
-        className="rounded-md border p-2 hover:bg-gray-100"
+        className="rounded-md border p-2 hover:bg-gray-400 bg-red-600 group"
       >
         <span className="sr-only">Delete</span>
-        <TrashIcon className="w-5" />
+        <TrashIcon className="w-5 text-white group-hover:text-gray-800" />
       </button>
 
       {showModal && (

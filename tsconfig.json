@@ -1,4 +1,5 @@
 {
+  // "$schema": "https://json.schemastore.org/tsconfig", // Removed or commented out to avoid schema fetch errors
   "compilerOptions": {
     "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -13,12 +14,14 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "types": [],
     "typeRoots": ["./types", "./node_modules/@types"],
     "plugins": [
       {
         "name": "next"
       }
     ],
+    "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"]

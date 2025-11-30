@@ -1,9 +1,13 @@
-import { fetchFilteredCustomers } from '@/app/lib/data';
-import { InvoicePaidDetail, InvoicePendingDetail, UpdateCustomer } from '@/app/ui/customers/buttons';
+import { fetchFilteredCustomers } from "@/app/lib/data";
+import {
+  InvoicePaidDetail,
+  InvoicePendingDetail,
+  UpdateCustomer,
+} from "@/app/ui/customers/buttons";
 
 export default async function CustomersTable({
   query,
-  currentPage
+  currentPage,
 }: {
   query: string;
   currentPage: number;
@@ -81,8 +85,10 @@ export default async function CustomersTable({
                         <InvoicePendingDetail id={customer.id} />
                       </td>
                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm group-first-of-type:rounded-md group-last-of-type:rounded-md">
-                        {customer.total_paid}
-                        <InvoicePaidDetail id={customer.id} />
+                        <div className="flex gap-3 items-center">
+                          {customer.total_paid}
+                          <InvoicePaidDetail id={customer.id} />
+                        </div>
                       </td>
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
                         <div className="flex justify-end gap-3">

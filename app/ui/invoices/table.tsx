@@ -15,7 +15,7 @@ export default async function InvoicesTable({
   return (
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full align-middle">
-        <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
+        <div className="rounded-3xl bg-white p-2 md:pt-0">
           <div className="md:hidden">
             {invoices?.map((invoice) => (
               <div
@@ -47,33 +47,33 @@ export default async function InvoicesTable({
             ))}
           </div>
           <table className="hidden min-w-full text-gray-900 md:table">
-            <thead className="rounded-lg text-center text-sm font-normal border-b-2 border-gray-800">
+            <thead className="rounded-lg text-sm font-normal border-b-2 border-gray-800">
               <tr>
-                <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
+                <th scope="col" className="px-4 text-start py-5 font-medium sm:pl-6">
                   Khách Hàng
                 </th>
-                <th scope="col" className="px-3 py-5 font-medium">
+                <th scope="col" className="px-3 text-start py-5 font-medium">
                   Mã
                 </th>
-                <th scope="col" className="px-3 py-5 font-medium">
+                <th scope="col" className="px-3 text-start py-5 font-medium">
                   Tên Hàng
                 </th>
-                <th scope="col" className="px-3 py-5 font-medium">
+                <th scope="col" className="px-3 text-start py-5 font-medium">
                   Số Lượng
                 </th>
-                <th scope="col" className="px-3 py-5 font-medium">
+                <th scope="col" className="px-3 text-start py-5 font-medium">
                   Giá Tiền
                 </th>
-                <th scope="col" className="px-3 py-5 font-medium">
+                <th scope="col" className="px-3 text-start py-5 font-medium">
                   Tổng Tiền
                 </th>
-                <th scope="col" className="px-3 py-5 font-medium">
+                <th scope="col" className="px-3 text-start py-5 font-medium">
                   Ngày
                 </th>
-                <th scope="col" className="px-3 py-5 font-medium">
+                <th scope="col" className="px-3 text-start py-5 font-medium">
                   Trạng Thái
                 </th>
-                <th scope="col" className="px-3 py-5 font-medium">
+                <th scope="col" className="px-3 text-start py-5 font-medium">
                   Ghi chú
                 </th>
                 <th scope="col" className="relative py-3 pl-6 pr-3">
@@ -85,10 +85,10 @@ export default async function InvoicesTable({
               {invoices?.map((invoice) => (
                 <tr
                   key={invoice.id}
-                  className="w-full text-center border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
+                  className="w-full border-b border-gray-400 py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                 >
                   <td className="whitespace-nowrap py-3 pl-6 pr-3 text-center">
-                    <div className="items-center gap-3">
+                    <div className="text-start gap-3">
                       <p className=''>{invoice.name}</p>
                     </div>
                   </td>
@@ -98,11 +98,23 @@ export default async function InvoicesTable({
                   <td className='whitespace-nowrap px-3 py-3'>
                     {invoice.product_name}
                   </td>
-                  <td className='whitespace-nowrap px-3 py-3'>
+                  {/* <td className='whitespace-nowrap px-3 py-3'>
                     {invoice.quantity}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
                     {formatCurrency(invoice.amount)}
+                  </td> */}
+                  <td className='whitespace-nowrap px-3 py-3'>
+                    <div className='flex justify-between'>
+                      {invoice.quantity}
+                      <span>x</span>
+                    </div>
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-3">
+                    <div className='flex justify-between'>
+                      {formatCurrency(invoice.amount)}
+                      <span>=</span>
+                    </div>
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
                     {formatCurrency(invoice.amount * invoice.quantity)}
